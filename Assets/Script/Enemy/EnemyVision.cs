@@ -4,10 +4,8 @@ using TMPro;
 public class EnemyVision : MonoBehaviour
 {
     [Header("Vision Settings")]
-   [SerializeField] float detectRange = 10f;
-    [Range(0, 180)]
-   //[SerializeField] float detectAngle = 90f;
-
+    [SerializeField] float detectRange = 10f;
+    
 
     [Header("References")]
     public Transform player;
@@ -20,23 +18,30 @@ public class EnemyVision : MonoBehaviour
     public bool PlayerDetected { get; private set; }
 
     bool isInRange;
-   // bool isInAngle;
+
     bool isVisible;
 
     void Update()
     {
-        CheckRange();
-      //  CheckAngle();
-        CheckVisibility();
-        FinalDetection();
-     
+        CheckRange();//se o player estiver na area
+        
+        CheckVisibility();//detecta parede e detecta o player
+        FinalDetection();//condições para realizar, no caso deve ser OU
+
     }
 
     void CheckRange()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
+        //transform.forward  considera a rotação
+        //https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Transform-forward.html
+        float forwardOffset = detectRange * 0.5f; // multiplica para que o raio da esfera pegue a parte da frente do inimigo. 0.5f metade do corpo
 
-        if (distance <= detectRange)
+        Vector3 origin = transform.position+ Vector3.up * 1.6f      // altura dos olhos
+                         + transform.forward * forwardOffset; // frente do inimigo
+
+        bool inRange = Physics.CheckSphere(origin, detectRange * 0.5f, playerLayer);
+
+        if (inRange)
         {
             isInRange = true;
             rangeText.text = "Socorro";
@@ -48,31 +53,7 @@ public class EnemyVision : MonoBehaviour
             rangeText.text = "De boas";
             rangeText.color = Color.green;
         }
-    }
-
-  /*  void CheckAngle()
-    {
-        Vector3 direction = (player.position - transform.position);
-            direction.y = 0f;
-        direction.Normalize();
-        Vector3 forward = transform.forward;
-        forward.y = 0f;
-        forward.Normalize();
-        float angle = Vector3.Angle(forward, direction);
-
-        if (angle <= detectAngle / 2f)
-        {
-            isInAngle = true;
-            angleText.text = "No Ângulo";
-            angleText.color = Color.red;
-        }
-        else
-        {
-            isInAngle = false;
-            angleText.text = "Fora do Campo";
-            angleText.color = Color.green;
-        }
-    }*/
+}
 
     void CheckVisibility()
     {//anteriormente da outra forma botando a posição do player , o raycast saia na diagonal em direção ao player
@@ -81,8 +62,11 @@ public class EnemyVision : MonoBehaviour
         //ver tamanho do player
 
         // Altura central do player
-        Collider playerCollider = player.GetComponentInChildren<Collider>();
-        Vector3 target = playerCollider.bounds.center;
+        Collider playerCollider = player.GetComponentInChildren<Collider>();//verificar os filhos
+        Vector3 target = playerCollider.bounds.center; //usar de ponto de referencia
+
+        //https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Bounds.html 
+
 
         // Direção horizontal única
         Vector3 direction = target - origin;
@@ -126,18 +110,18 @@ public class EnemyVision : MonoBehaviour
     }
     void LateUpdate()
     {
-        PlayerDetected = isInRange && isVisible;
+        PlayerDetected = isInRange || isVisible;//OU - priorizando 
+        //diminuir tamanho do range
     }
     void OnDrawGizmosSelected()
     {
+        float forwardOffset = detectRange * 0.5f;//desenhar o gizmos lembrando das refs utilizadas anteriormente
+
+        Vector3 origin = transform.position
+                         + Vector3.up * 1.6f
+                         + transform.forward * forwardOffset;
+
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectRange);
-
-       // Vector3 leftLimit = Quaternion.Euler(0, -detectAngle / 2, 0) * transform.forward;
-        //Vector3 rightLimit = Quaternion.Euler(0, detectAngle / 2, 0) * transform.forward;
-
-       // Gizmos.color = Color.blue;
-        //Gizmos.DrawRay(transform.position, leftLimit * detectRange);
-        //Gizmos.DrawRay(transform.position, rightLimit * detectRange);
+        Gizmos.DrawWireSphere(origin, detectRange * 0.5f);
     }
 }
