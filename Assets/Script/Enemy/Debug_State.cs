@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EnemyDebugUI : MonoBehaviour
-{
+{//Feedback no game para ver se EnemyAi está funcionando
     [SerializeField] private EnemyAI enemy; // referência ao inimigo
     [SerializeField] private Image stateIndicator; // imagem da UI
 

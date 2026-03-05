@@ -3,6 +3,7 @@ using TMPro;
 
 public class EnemyVision : MonoBehaviour
 {
+    //adicionar um script de detecção. Se o jogador estiver perto do inimigo começa o som de piseiro
     [Header("Vision Settings")]
     [SerializeField] float detectRange = 10f;
     

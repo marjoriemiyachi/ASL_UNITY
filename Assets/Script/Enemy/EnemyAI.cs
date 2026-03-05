@@ -2,34 +2,34 @@
 using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
-{
-    public enum EnemyState { Patrol, Chase }
-    public EnemyState currentState;
+{//revisar codigo Patrol Path e EnemyAi para incluir mais de um inimigo
+    public enum EnemyState { Patrol, Chase }//Enum com os estados de Patrulha e Perseguição
+    public EnemyState currentState;// status atual
 
     [Header("Referências")]
     public PatrolPath patrolPath;
     public Transform player;
 
     [Header("Configurações")]
-    public float maxDistance = 20f;
+    public float maxDistance = 20f; //até onde o inimigo irá perseguir o jogador, o quão longe dos waypoints ele pode ficar
     public float waitTimeAtWaypoint = 1f;
 
     private NavMeshAgent agent;
-    private EnemyVision enemyVision;
+    private EnemyVision enemyVision;//chama Script Enemy vision
     private Vector3 currentWaypoint;
     private float waitTimer = 0f;
 
     private void Awake()
-    {
-        agent = GetComponent<NavMeshAgent>();
-        enemyVision = GetComponent<EnemyVision>();
+    {//inicializar
+        agent = GetComponent<NavMeshAgent>();// chama o NavMesh para ter acesso
+        enemyVision = GetComponent<EnemyVision>();//chama o script EnemyVision para ter acesso
     }
     //verifica stopping inicial se ele é maior que >0
     private void Start()
     {
-        
+        //o status inicial deve ser patrulha, chama o enum EnemyState mencionado no inicio
         currentState = EnemyState.Patrol;
-
+        //if a area de patrulha for diferente de nulo E variavel patrolpath.waypoints(sistem.array.length) for maior que zero
         if (patrolPath != null && patrolPath.waypoints.Length > 0)
         {
             currentWaypoint = patrolPath.GetCurrentWaypoint();
