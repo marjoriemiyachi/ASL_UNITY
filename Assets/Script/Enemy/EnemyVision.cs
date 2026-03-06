@@ -45,13 +45,13 @@ public class EnemyVision : MonoBehaviour
         if (inRange)
         {
             isInRange = true;
-            rangeText.text = "Socorro";
+            rangeText.text = "Na Area";
             rangeText.color = Color.red;
         }
         else
         {
             isInRange = false;
-            rangeText.text = "De boas";
+            rangeText.text = "Fora da Area";
             rangeText.color = Color.green;
         }
 }
@@ -82,13 +82,13 @@ public class EnemyVision : MonoBehaviour
             if (((1 << hit.collider.gameObject.layer) & playerLayer) != 0)
             {
                 isVisible = true;
-                hiddenText.text = "Tá vendo ele!";
+                hiddenText.text = "Visivel";
                 hiddenText.color = Color.red;
             }
             else
             {
                 isVisible = false;
-                hiddenText.text = "Obstruído";
+                hiddenText.text = "Obstruido";
                 hiddenText.color = Color.green;
             }
         }
@@ -98,7 +98,7 @@ public class EnemyVision : MonoBehaviour
 
     void FinalDetection()
     {
-        if (isInRange && isVisible)
+        if (isInRange || isVisible)
         {
             detectedText.text = "PLAYER DETECTADO";
             detectedText.color = Color.red;
