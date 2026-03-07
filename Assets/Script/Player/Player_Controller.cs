@@ -22,9 +22,9 @@ public class Player_Controller : MonoBehaviour
     private void FixedUpdate()
     {
         //chamar função 
-        Movimentar();
+        MovimentarNormal();
     }
-    void Movimentar()
+    void MovimentarNormal()
     {
         Vector3 dir;
         float dirZ = Input.GetAxis("Vertical");
@@ -34,3 +34,9 @@ public class Player_Controller : MonoBehaviour
 
     }
 }
+/*
+ * Quaternion vai adicionando numa rotaçãode 360 e depois voltam para um tempo em comum e acumula 
+ * então existe uma quarta variavel para armazenar visto que nunca teremos 361
+ * Euler angles são vector 3 com angulação
+ * 
+ */

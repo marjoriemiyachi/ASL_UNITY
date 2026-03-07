@@ -6,11 +6,11 @@ public class EnemyAI : MonoBehaviour
     public enum EnemyState { Patrol, Chase }//Enum com os estados de Patrulha e Perseguição
     public EnemyState currentState;// status atual
 
-    [Header("Referências")]
+    
     public PatrolPath patrolPath;
     public Transform player;
 
-    [Header("Configurações")]
+  
     public float maxDistance = 20f; //até onde o inimigo irá perseguir o jogador, o quão longe dos waypoints ele pode ficar
     public float waitTimeAtWaypoint = 1f;
 
